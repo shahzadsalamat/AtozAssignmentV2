@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Table</title>
+	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/foundation/5.1.0/css/foundation.min.css'>
+	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/foundation/5.1.0/css/normalize.min.css'>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js'></script>
+    <script src='https://assets.fabianluna.co/js/angular-pagination.js'></script>
+    <script  src="index.js"></script>
+</head>
+
+<body>
+
+  <body ng-app="table" ng-controller="TableController">
+	<div class="row">
+		<div class="columns">
+      Drinks
+			<select ng-options="item as item.label for item in types" ng-model="type"
+              ng-change="changeData()"></select>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="columns small-6">
+			</br>
+				<input placeholder="Search"
+               type="text"
+               ng-model="search[selectFilter]" >
+
+		</div>
+		<div class="columns small-6">
+			<label for="">Filter By</label>
+			<select
+					ng-model="selectFilter"
+					ng-init="selectFilter='$'"
+					ng-change="changeFilterTo();">
+				<option
+						ng-repeat="item in filter[0]"
+						value="{{item}}">
+					{{filter[1][$index]}}
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="columns">
+			<table>
+				<tr ng-if="data.length > 0">
+					<th class="order" ng-repeat="item in head" ng-click="order(propertiesHead[$index])" >
+						{{item}}
+						<i ng-show="orderBy.predicate==propertiesHead[$index]"
+              				 ng-class="{'up':orderBy.reverse,'down':!orderBy.reverse}"></i>
+					</th>
+				</tr>
+				<tr
+           		 ng-if="data.length > 0"
+				 dir-paginate="item in data | orderBy : orderBy.predicate : orderBy.reverse | filter : search | itemsPerPage : limit.per_page">
+					<td>{{item.id}}</td>
+					<td><img ng-src="{{item.images}}" ng-show="item.images!=''" alt="no image" width="30px;" height="30px;"><img ng-src="http://programming-challenge.arinium.fi/images/energy-drinks/original/no-image.png" ng-hide="item.images!=''" width="30px;" height="30px;"></td>
+					<td>{{item.title}}</td>
+					<td>{{item.description}}</td>
+					<td>{{item.pricerange}}</td>
+					<td>{{item.preferability}}</td>
+
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div class="row">
+    <div class="columns">
+      <dir-pagination-controls
+                               max-size="8"
+                               direction-links="true"
+                               boundary-links="true"></dir-pagination-controls>
+    </div>
+
+
+  </div>
+</html>
